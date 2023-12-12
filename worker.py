@@ -3,16 +3,23 @@ from flask import request
 import requests
 import os
 import json
+from google.cloud import secretmanager
 app = Flask(__name__)
 
 def get_api_key() -> str:
-    secret = os.environ.get("COMPUTE_API_KEY")
+    # Try to get the API key from environment variable first
+    secret = os.environ.get("compute-api-key")
     if secret:
         return secret
-    else:
-        #local testing
-        with open('.key') as f:
-            return f.read()
+
+    # If not found in environment variables, fetch from Secret Manager
+    project_id = "cloudcomputelab6"  # Replace with your project ID
+    secret_id = "compute-api-key"  # The secret name in Secret Manager
+
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+    response = client.access_secret_version(name=name)
+    return response.payload.data.decode("UTF-8")
       
 @app.route("/")
 def hello():
