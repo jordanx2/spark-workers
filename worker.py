@@ -17,7 +17,7 @@ def get_api_key() -> str:
     secret_id = "compute-api-key"  # The secret name in Secret Manager
 
     client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+    name = f"projects/{project_id}/secrets/{secret_id}/"
     response = client.access_secret_version(name=name)
     return response.payload.data.decode("UTF-8")
       
