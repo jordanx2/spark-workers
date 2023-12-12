@@ -13,11 +13,11 @@ def get_api_key() -> str:
         return secret
 
     # If not found in environment variables, fetch from Secret Manager
-    project_id = "334590066640"  # Replace with your project ID
+    project_id = "cloudcomputelab6"  # Replace with your project ID
     secret_id = "compute-api-key"  # The secret name in Secret Manager
 
     client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/{project_id}/secrets/{secret_id}/"
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
     response = client.access_secret_version(name=name)
     return response.payload.data.decode("UTF-8")
       
