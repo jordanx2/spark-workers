@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 def get_api_key() -> str:
-    secret = os.environ.get("compute-api-key")
+    secret = os.environ.get("COMPUTE_API_KEY")
     if secret:
         return secret
     else:
@@ -30,7 +30,7 @@ def add():
   else:
     token=get_api_key()
     ret = addWorker(token,request.form['num'])
-    return ret
+    return ret    
 
 
 def addWorker(token, num):
