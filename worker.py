@@ -39,14 +39,16 @@ def add():
     ret = addWorker(token,request.form['num'])
     return ret    
 
-@app.route("/multiple",methods=['GET','POST'])
-def add():
-  if request.method=='GET':
-    return "Use post to add multiple" # replace with form template
-  else:
-    token=get_api_key()
-    ret = addMultipleWorkers(token,request.form['num'])
-    return ret    
+@app.route("/multiple", methods=['GET', 'POST'])
+def addMultiple():
+    if request.method == 'GET':
+        return "Use post to add multiple" # replace with form template
+    else:
+        token = get_api_key()
+        nums = request.form['nums'].split(',') 
+        nums = [int(num) for num in nums]  
+        ret = addMultipleWorkers(token, nums)  
+        return ret
 
 def addWorker(token, num):
     with open('payload.json') as p:
@@ -63,23 +65,23 @@ def addWorker(token, num):
       return "Error\n"+resp.content.decode('utf-8') + '\n\n\n'+data
 
 
-  def addMultipleWorkers(token, nums):
-    url = 'https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
-    headers = {"Authorization": "Bearer " + token}
-    results = []
+def addMultipleWorkers(token, nums):
+  url = 'https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
+  headers = {"Authorization": "Bearer " + token}
+  results = []
 
-    for num in nums:
-        with open('payload.json') as p:
-            tdata = json.load(p)
-        tdata['name'] = 'slave' + str(num)
-        data = json.dumps(tdata)
-        resp = requests.post(url, headers=headers, data=data)
-        if resp.status_code == 200:
-            results.append(f"Slave {num}: Done")
-        else:
-            error_message = f"Slave {num}: Error\n{resp.content.decode('utf-8')}\n\n\n{data}"
-            print(error_message)
-            results.append(error_message)
+  for num in nums:
+      with open('payload.json') as p:
+          tdata = json.load(p)
+      tdata['name'] = 'slave' + str(num)
+      data = json.dumps(tdata)
+      resp = requests.post(url, headers=headers, data=data)
+      if resp.status_code == 200:
+          results.append(f"Slave {num}: Done")
+      else:
+          error_message = f"Slave {num}: Error\n{resp.content.decode('utf-8')}\n\n\n{data}"
+          print(error_message)
+          results.append(error_message)
 
 
 
