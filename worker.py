@@ -46,8 +46,8 @@ def addMultiple():
     else:
         token = get_api_key()
         nums = request.form['nums'].split(',') 
-        return request.form['nums']
-        # nums = [int(num) for num in nums]  
+        nums = [int(num) for num in nums]  
+        return nums
         # ret = addMultipleWorkers(token, nums)   
         # return ret
 
