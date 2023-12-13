@@ -69,7 +69,6 @@ def addMultipleWorkers(token, nums):
   url = 'https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
   headers = {"Authorization": "Bearer " + token}
   results = []
-
   for num in nums:
       with open('payload.json') as p:
           tdata = json.load(p)
