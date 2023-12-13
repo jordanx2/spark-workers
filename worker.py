@@ -39,8 +39,16 @@ def add():
     ret = addWorker(token,request.form['num'])
     return ret    
 
-
 @app.route("/multiple",methods=['GET','POST'])
+def multiple():
+  if request.method=='GET':
+    return "Use post to add multiple" 
+  else:
+    token=get_api_key()
+    ret = addMultipleWorkers(token,request.form['num'])
+    return ret    
+
+
 def addMultipleWorkers(token, nums):
     url = 'https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
     headers = {"Authorization": "Bearer " + token}
