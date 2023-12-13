@@ -40,20 +40,25 @@ def add():
     return ret    
 
 
-def addWorker(token, num):
-    with open('payload.json') as p:
-      tdata=json.load(p)
-    tdata['name']='slave'+str(num)
-    data=json.dumps(tdata)
-    url='https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
-    headers={"Authorization": "Bearer "+token}
-    resp=requests.post(url,headers=headers, data=data)
-    if resp.status_code==200:     
-      return "Done"
-    else:
-      print(resp.content)
-      return "Error\n"+resp.content.decode('utf-8') + '\n\n\n'+data
+@app.route("/multiple",methods=['GET','POST'])
+def addMultipleWorkers(token, nums):
+    url = 'https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
+    headers = {"Authorization": "Bearer " + token}
+    results = []
 
+    for num in nums:
+        with open('payload.json') as p:
+            tdata = json.load(p)
+        tdata['name'] = 'slave' + str(num)
+        data = json.dumps(tdata)
+        resp = requests.post(url, headers=headers, data=data)
+        if resp.status_code == 200:
+            results.append(f"Slave {num}: Done")
+        else:
+            error_message = f"Slave {num}: Error\n{resp.content.decode('utf-8')}\n\n\n{data}"
+            results.append(error_message)
+
+          return results
 
 
 if __name__ == "__main__":
