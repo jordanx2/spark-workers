@@ -40,16 +40,30 @@ def add():
     return ret    
 
 @app.route("/multiple",methods=['GET','POST'])
-def multiple():
+def add():
   if request.method=='GET':
-    return "Use post to add multiple" 
+    return "Use post to add multiple" # replace with form template
   else:
     token=get_api_key()
     ret = addMultipleWorkers(token,request.form['num'])
     return ret    
 
+def addWorker(token, num):
+    with open('payload.json') as p:
+      tdata=json.load(p)
+    tdata['name']='slave'+str(num)
+    data=json.dumps(tdata)
+    url='https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
+    headers={"Authorization": "Bearer "+token}
+    resp=requests.post(url,headers=headers, data=data)
+    if resp.status_code==200:     
+      return "Done"
+    else:
+      print(resp.content)
+      return "Error\n"+resp.content.decode('utf-8') + '\n\n\n'+data
 
-def addMultipleWorkers(token, nums):
+
+  def addMultipleWorkers(token, nums):
     url = 'https://www.googleapis.com/compute/v1/projects/cloudcomputelab6/zones/europe-west1-b/instances'
     headers = {"Authorization": "Bearer " + token}
     results = []
@@ -64,9 +78,12 @@ def addMultipleWorkers(token, nums):
             results.append(f"Slave {num}: Done")
         else:
             error_message = f"Slave {num}: Error\n{resp.content.decode('utf-8')}\n\n\n{data}"
+            print(error_message)
             results.append(error_message)
 
-          return results
+
+
+
 
 
 if __name__ == "__main__":
