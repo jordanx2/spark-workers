@@ -33,7 +33,7 @@ def test():
 @app.route("/add",methods=['GET','POST'])
 def add():
   if request.method=='GET':
-    return "Use post to add" # replace with form template
+    return "Use post to add" 
   else:
     token=get_api_key()
     ret = addWorker(token,request.form['num'])
@@ -42,13 +42,14 @@ def add():
 @app.route("/multiple", methods=['GET', 'POST'])
 def addMultiple():
     if request.method == 'GET':
-        return "Use post to add multiple" # replace with form template
+        return "Use post to add multiple" 
     else:
         token = get_api_key()
         nums = request.form['nums'].split(',') 
-        nums = [int(num) for num in nums]  
-        ret = addMultipleWorkers(token, nums)  
-        return ret
+        return nums
+        # nums = [int(num) for num in nums]  
+        # ret = addMultipleWorkers(token, nums)  
+        # return ret
 
 def addWorker(token, num):
     with open('payload.json') as p:
