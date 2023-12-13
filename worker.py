@@ -47,9 +47,8 @@ def addMultiple():
         token = get_api_key()
         nums = request.form['nums'].split(',') 
         nums = [int(num) for num in nums]  
-        return nums
-        # ret = addMultipleWorkers(token, nums)   
-        # return ret
+        ret = addMultipleWorkers(token, nums)   
+        return ret
 
 def addWorker(token, num):
     with open('payload.json') as p:
