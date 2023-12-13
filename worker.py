@@ -83,6 +83,8 @@ def addMultipleWorkers(token, nums):
           print(error_message)
           results.append(error_message)
 
+  return results
+
 
 
 
